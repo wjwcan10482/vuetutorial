@@ -1,0 +1,80 @@
+<template>
+  <div>
+    <!-- 文本插值 -->
+    <p>Message: {{ message }}</p>
+
+    <!-- 属性绑定 -->
+    <img :src="imageSrc" alt="Vue Logo" />
+
+    <!-- 事件处理 -->
+    <button @click="greet">Greet</button>
+
+    <!-- 条件渲染 -->
+    <p v-if="isLoggedIn">Welcome back!</p>
+    <p v-else>Sign in to continue.</p>
+
+    <!-- 列表渲染 -->
+    <ul>
+      <li v-for="(item, index) in items" :key="index">
+        {{ item.text }}
+      </li>
+    </ul>
+
+    <!-- 插槽 -->
+    <slot></slot>
+    <slot name="header">Default Header</slot>
+
+    <!-- 计算属性 -->
+    <p>Computed Message: {{ computedMessage }}</p>
+
+    <!-- 侦听器 -->
+    <p>Message after watcher: {{ messageAfterWatcher }}</p>
+  </div>
+</template>
+
+<script>
+import { defineComponent, ref, computed, watch } from 'vue';
+
+export default defineComponent({
+  setup() {
+    // 数据
+    const message = ref('Hello Vue!');
+    const imageSrc = ref('https://vuejs.org/images/logo.png');
+    const isLoggedIn = ref(false);
+    const items = ref([{ text: 'Item 1' }, { text: 'Item 2' }]);
+    const messageAfterWatcher = ref('');
+
+    // 方法
+    const greet = () => {
+      alert('Hello from TestVue!');
+    };
+
+    // 计算属性
+    const computedMessage = computed(() => `Computed Message: ${message.value}`);
+
+    // 侦听器
+    watch(isLoggedIn, (newValue, oldValue) => {
+      if (newValue) {
+        messageAfterWatcher.value = 'You are now logged in!';
+      } else {
+        messageAfterWatcher.value = '';
+      }
+    });
+
+    // 返回响应式数据和方法
+    return {
+      message,
+      imageSrc,
+      isLoggedIn,
+      items,
+      greet,
+      computedMessage,
+      messageAfterWatcher
+    };
+  }
+});
+</script>
+
+<style scoped>
+/* 在这里添加你的CSS样式 */
+</style>
